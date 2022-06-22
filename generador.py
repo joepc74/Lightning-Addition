@@ -30,21 +30,24 @@ def generar_combinaciones(val,filas,total):
 # Generar las combinaciones posibles
 valores=generar_combinaciones([],filas-1,suma)
 
-minmax={11:[0,7],17:[2,9],20:[0,9]} # minimos y maximos del numero aleatorio
+minmax={11:[0,7],17:[2,9],20:[0,7]} # minimos y maximos del numero aleatorio
 tamfuente={4:145,5:135} # tamaño de la fuente
 # calculamos las posiciones de las columnas dentro de la hojas
+pdf = fpdf.FPDF(orientation='L') #pdf format
+pdf.add_font('Franklin', '', r"Franklin Gothic Heavy Regular.ttf", uni=True)
+pdf.set_font("Franklin", size=tamfuente[filas]) # font and textsize
+anchohoja=pdf.w-10 # descuento 10 de margen por cada lado
+altohoja=pdf.h-20 # descuento 10 de margen por cada lado
+
 poscol=[10]
 while (len(poscol)<columnas):
-    poscol.append(poscol[-1]+280/columnas)
+    poscol.append(poscol[-1]+anchohoja/columnas)
 
 # calculamos las posiciones de las filas dentro de la hojas
 posfila=[20]
 while (len(posfila)<filas):
-    posfila.append(posfila[-1]+190/filas)
+    posfila.append(posfila[-1]+altohoja/filas)
 
-pdf = fpdf.FPDF(orientation='L') #pdf format
-pdf.add_font('Franklin', '', r"Franklin Gothic Heavy Regular.ttf", uni=True)
-pdf.set_font("Franklin", size=tamfuente[filas]) # font and textsize
 
 
 for a in range(0,paginas):
@@ -54,7 +57,7 @@ for a in range(0,paginas):
         numeros.insert(filas-2,random.randint(minmax[suma][0],minmax[suma][1]))
         for fila in range(0,filas):
             pdf.set_xy(poscol[columna], posfila[fila])
-            pdf.cell(270/columnas, 17, txt=str(numeros[fila]), ln=0, align="C",border=0)
+            pdf.cell(anchohoja/columnas, 17, txt=str(numeros[fila]), ln=0, align="C",border=0)
 archivo="Lightning_Addition_suma{}_{}x{}_{}paginas.pdf".format(suma,columnas,filas,paginas)
 pdf.output(archivo)
 print("Generado archivo:",archivo)
