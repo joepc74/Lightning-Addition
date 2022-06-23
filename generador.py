@@ -30,7 +30,7 @@ def generar_combinaciones(val,filas,total):
 # Generar las combinaciones posibles
 valores=generar_combinaciones([],filas-1,suma)
 
-minmax={11:[0,7],17:[2,9],20:[0,7]} # minimos y maximos del numero aleatorio
+minmax={11:[[0,7],[0,8]],17:[[2,9],[3,9]],20:[[0,7],[0,7]]} # minimos y maximos del numero aleatorio
 tamfuente={4:145,5:135} # tamaño de la fuente
 # calculamos las posiciones de las columnas dentro de la hojas
 pdf = fpdf.FPDF(orientation='L') #pdf format
@@ -54,7 +54,10 @@ for a in range(0,paginas):
     pdf.add_page() #create new page
     for columna in range(0,columnas):
         numeros=random.choice(valores).copy()
-        numeros.insert(filas-2,random.randint(minmax[suma][0],minmax[suma][1]))
+        if columna==columnas-1:
+            numeros.insert(filas-2,random.randint(minmax[suma][1][0],minmax[suma][1][1]))
+        else:
+            numeros.insert(filas-2,random.randint(minmax[suma][0][0],minmax[suma][0][1]))
         for fila in range(0,filas):
             pdf.set_xy(poscol[columna], posfila[fila])
             pdf.cell(anchohoja/columnas, 17, txt=str(numeros[fila]), ln=0, align="C",border=0)
